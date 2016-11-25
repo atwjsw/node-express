@@ -14,6 +14,14 @@ app.set('view engine', 'handlebars');
 //通过设置环境变量覆盖端口
 app.set('port', process.env.PORT || 3000);
 
+//中间件来检测查询字符串中的test=1；如果test=1 出现在任何页面的查询字符串中（并且不是运行在生产服务器上），
+//属性res.locals.showTests 就会被设为true
+app.use(function(req, res, next) {
+    res.locals.showTests = app.get('env') !== 'production' &&
+        req.query.test === '1';
+    next();
+});
+
 //把static 中间件加在所有路由之前
 app.use(express.static(__dirname + '/public'));
 
@@ -22,9 +30,17 @@ app.get('/', function(req, res) {
     res.render('home');
 });
 
-app.get('/about', function(req, res) {    
-    //将随机获取的元素以对象形式返回
-    res.render('about', { fortune: fortune.getFortune() });
+app.get('/about', function(req, res) {
+    //将随机获取的元素以对象形式返回, 并将测试脚本名称返回
+    res.render('about', { fortune: fortune.getFortune(), pageTestScript: '/qa/tests-about.js' });
+});
+
+app.get('/tours/hood-river', function(req, res){
+    res.render('tours/hood-river');
+});
+
+app.get('/tours/request-group-rate', function(req, res){
+    res.render('tours/request-group-rate');
 });
 
 // 404 catch-all 处理器（中间件）
