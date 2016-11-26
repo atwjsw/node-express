@@ -11,10 +11,20 @@
     {{/if}} {{#if showTests}}
     <link rel="stylesheet" href="/vendor/mocha.css"> {{/if}}
     <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+    <style type="text/css">
+        a.currency {
+        text-decoration: none;
+        }
+        .currency.selected {
+        font-weight: bold;
+        font-size: 150%;
+        }
+    </style>
 </head>
 
 <body>
-    <header><img src="/img/logo.png" alt="Meadowlark Travel Logo"></header>
+    {{!-- <header><img src="/img/logo.png" alt="Meadowlark Travel Logo"></header> --}}
+    <header><img src="{{static '/img/logo.png'}}" alt="Meadowlark Travel Logo"></header>
     {{{body}}} {{#if showTests}}
     <div id="mocha"></div>
     <script src="/vendor/mocha.js"></script>

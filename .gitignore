@@ -43,5 +43,5 @@ jspm_packages
 .node_repl_history
 >>>>>>> 60ee6da51ae45cd4e7d591dc6a225987db9351a4
 
-# Cookie secret
-credentials.js
+# Upload data
+data
