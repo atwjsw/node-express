@@ -8,9 +8,12 @@
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <strong>{{flash.intro}}</strong> {{{flash.message}}}
     </div>
-    {{/if}} {{#if showTests}}
+    {{/if}}
+    {{#if showTests}}
     <link rel="stylesheet" href="/vendor/mocha.css"> {{/if}}
-    <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+    <script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+    <script src="{{static '/js/meadowlark.min.62a6f623.js'}}"></script>
+    <link rel="stylesheet" href="{{static '/css/meadowlark.min.2a8883cf.css'}}">   
     <style type="text/css">
         a.currency {
         text-decoration: none;
@@ -40,7 +43,8 @@
     <script>
     mocha.run();
     </script>
-    {{/if}} {{{_sections.jquery}}}
+    {{/if}} 
+    {{{_sections.jquery}}}
 </body>
 
 </html>

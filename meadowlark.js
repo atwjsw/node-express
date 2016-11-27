@@ -1,3 +1,4 @@
+var https = require('https');
 var express = require('express');
 var app = express();
 var fs = require('fs');
@@ -8,6 +9,15 @@ var fortune = require('./lib/fortune.js');
 var credentials = require('./credentials.js');
 //购物车校验中间件
 var cartValidation = require('./lib/cartValidation.js');
+
+//调用twitter api
+var twitter = require('./lib/twitter')({
+    consumerKey: credentials.twitter.consumerKey,
+    consumerSecret: credentials.twitter.consumerSecret,
+});
+twitter.search('#meadowlarktravel', 10, function(result) {
+    // 推文会在result.statuses 中
+});
 
 var MongoSessionStore = require('session-mongoose')(require('connect'));
 var sessionStore = new MongoSessionStore({ url: credentials.mongo.connectionString });
@@ -45,7 +55,7 @@ var handlebars = require('express3-handlebars').create({
 
 // 设置handlebars 视图引擎
 var handlebars = require('express3-handlebars').create({
-    defaultLayout: 'main',    
+    defaultLayout: 'main',
     helpers: {
         //通过helpers支持section
         section: function(name, options) {
@@ -234,6 +244,7 @@ app.get('/api/attraction/:id', function(req, res) {
 
 
 
+
 // 404 catch-all 处理器（中间件）
 app.use(function(req, res, next) {
     res.status(404);
@@ -247,19 +258,19 @@ app.use(function(err, req, res, next) {
     res.render('500');
 });
 
-
-/*app.listen(app.get('port'), function() {
-    console.log('Express started in ' + app.get('env') +
-        ' mode on http://localhost:' + app.get('port') +
-        '; press Ctrl-C to terminate.');
-});*/
-
+//私钥和SSL证书
+var options = {
+    key: fs.readFileSync(__dirname + '/ssl/meadowlark.pem'),
+    cert: fs.readFileSync(__dirname + '/ssl/meadowlark.crt'),
+};
 
 function startServer() {
-    //http.createServer(app).listen(app.get('port'), function() {
     app.listen(app.get('port'), function() {
+        //http.createServer(app).listen(app.get('port'), function() {    
+        //https.createServer(options, app).listen(app.get('port'), function() {
+        //https.createServer(options, app).listen(443, function() {
         console.log('Express started in ' + app.get('env') +
-            ' mode on http://localhost:' + app.get('port') +
+            ' mode on https://localhost:' + app.get('port') +
             '; press Ctrl-C to terminate.');
     });
 }
@@ -273,6 +284,7 @@ if (require.main === module) {
     // 创建服务器
     module.exports = startServer;
 }
+
 
 
 //创建一个方法来获取当前天气数据
